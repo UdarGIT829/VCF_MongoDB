@@ -8,7 +8,10 @@ def mutate(_ref,_altData):
         position_checkpoint=int(position_checkpoint)   
         print(f"Processing Position {position_checkpoint}",end="\r")     
         seq += _ref[counter:position_checkpoint-1]
-        seq += mutation_checkpoint.split(">")[1]
+        if mutation_checkpoint.split(">")[0] != _ref[position_checkpoint-1]:
+            print(f"Warning: Refbase VCF mismatch notice @ {position_checkpoint}")
+        _altbase = mutation_checkpoint.split(">")[1]
+        seq += _altbase
         counter = position_checkpoint-1+len(mutation_checkpoint.split(">")[0])
     return seq
 
