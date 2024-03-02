@@ -1,6 +1,6 @@
 import import_database
 import import_vcf
-from pymongo import MongoClient, errors
+from pymongo import MongoClient
 
 
 imported_samples = import_vcf.do1000gpt()

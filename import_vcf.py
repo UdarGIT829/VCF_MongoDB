@@ -2,7 +2,7 @@ import csv
 import glob
 
 # For carriage return in printing
-import sys
+# import sys
 
 def do1000gpt()-> dict:
     sampleNames = list()

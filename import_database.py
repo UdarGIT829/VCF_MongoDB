@@ -1,7 +1,4 @@
 from pymongo import errors
-import csv # for parsing the vcf
-import sys # for memory size statistics
-import import_vcf
 
 from utilities import *
 
