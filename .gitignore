@@ -153,3 +153,7 @@ cython_debug/
 
 # Sandbox testing
 test.py
+*.vcf
+*.gz
+*.txt
+*.fa

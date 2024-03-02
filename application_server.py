@@ -23,17 +23,66 @@ def query_db():
     # Convert results to a list of dicts
     results_list = list(results)
     if params.get("do mutation") != None:
-        _ref = get_refSEQ(r"ref\GRCh38.txt")
+        if query_params.get("chr") != None:
+            mutaTarget_Chr = query_params.get("chr")
+        else:
+            mutaTarget_Chr = "MT"
         for iterResult in results_list:
-            iterResult["seq"] = mutator.mutate(_ref=_ref, _altData=iterResult['MT'])
+            iterResult["seq"] = mutator.mutate(_altData=iterResult['chromosomes'][mutaTarget_Chr])
+    # Return the results as JSON
+    if len(results_list) == 1:
+        return jsonify(results_list[0])
+    return jsonify(results_list)
+
+
+@app.route('/query_ref', methods=['GET'])
+def query_refdb():
+    # Extract query parameters
+    query_params = request.json.get("data")
+
+    # Query the database
+    results = mongo.db["ref_store"].find(query_params)
+    # Convert results to a list of dicts
+    results_list = list(results)
+
+    # Return the results as JSON
+    if len(results_list) == 1:
+        return jsonify(results_list[0])
+    return jsonify(results_list)
+
+# Route to query the database for just IDs
+@app.route('/samples', methods=['GET'])
+def query_db_ids():
+    # Query the database for ids
+    results = mongo.db["vcf_refLinked"].find({}, {'_id': 1})
+    # Convert results to a list of dicts
+    results_list = list(results)
+    
+    # Return the results as JSON
+    return jsonify(results_list)
+
+# Route to query the database for just IDs
+@app.route('/references', methods=['GET'])
+def query_db_refs():
+    # Query the database for ids
+    results = mongo.db["ref_store"].find({}, {'_id': 1})
+    # Convert results to a list of dicts
+    results_list = list(results)
+    
     # Return the results as JSON
     return jsonify(results_list)
 
 # Route to insert a single document into the database
 @app.route('/insert_one', methods=['POST'])
 def insert_one():
-    data = request.json
-    result = mongo.db["vcf_refLinked"].insert_one(data)
+    data = request.json.get("data")
+
+    selectedCollection = request.json.get("collection")
+
+    if selectedCollection == None:
+        selectedCollection = "vcf_refLinked"
+
+    result = mongo.db[selectedCollection].insert_one(data)
     return jsonify({"result": "success", "document_id": str(result.inserted_id)})
 
 # Route to insert many documents into the database

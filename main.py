@@ -14,4 +14,6 @@ db = client['vcfs']
 # Step 3a: Create or switch to your collection
 collection = db['vcf_refLinked']
 
-insertSamplesToCollection(collection=collection, samples=imported_samples)
+# print(imported_samples)
+
+import_database.insertSamplesToCollection(collection=collection, samples=imported_samples)

@@ -1,9 +1,14 @@
 import time
+import utilities
 
-def mutate(_ref,_altData):
+def mutate(_altData):
     seq = ""
     counter = 0
     sorted_mutations = _altData
+    refID = _altData.pop("refID")
+    # Get reference sequence from utils
+    _ref = utilities.get_refSEQ(refID)
+
     for position_checkpoint,mutation_checkpoint in _altData.items():
         position_checkpoint=int(position_checkpoint)   
         print(f"Processing Position {position_checkpoint}",end="\r")     

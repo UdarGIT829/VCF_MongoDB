@@ -1,50 +1,95 @@
 import csv
+import glob
 
-def do1000gpt()-> list:
+# For carriage return in printing
+import sys
+
+def do1000gpt()-> dict:
     sampleNames = list()
     headers = list()
 
-    batch_data = list()
-    data = dict()
+    samples = dict()
 
-    _chrms = [""]
-    with open(r"vcf\ALL.chrMT.phase3_callmom-v0_4.20130502.genotypes.vcf", "r") as fi:
-        reader = list(csv.reader(fi, delimiter="\t"))
-        samples = dict()
-        foundHeaders = 0
-        for lineIndex in range(len(reader)):
-            line = reader[lineIndex]
-            if "#CHROM" in line[0]:
-                foundHeaders = lineIndex
-                headers = line[0:8]
-                sampleNames = line[9:]
-                for iterSample in sampleNames:
-                    samples[iterSample] = {
-                        '_id': iterSample,
-                        'data_src': '1000gpt',
-                        'refID': 'GRCh38',
-                        'tags':'',
-                    }
+    vcf_files_path = 'vcf/*.vcf'
+    vcf_files = glob.glob(vcf_files_path)
 
-            elif foundHeaders > 0:
-                mutation = {    
-                    'chr':line[0],
-                    'pos':line[1],
-                    'ref':line[3],
-                    'alt':line[4]
-                    }
+    for vcf_file in vcf_files:
+        print(f'Opening file: {vcf_file}')
+        with open(vcf_file, 'r') as fi:
+            print(f'Processing file: {vcf_file}')
+            reader = csv.reader(fi, delimiter="\t")
+            _refID = "PLACEHOLDER REFID"
+            foundHeaders = False
+            lineIndex = 0
+            for line in reader:
+                print(f'Processing line: {lineIndex+1}', end="\r")
+                # sys.stdout.flush()
+                # print(f"Line: {line}")
+                lineIndex += 1
 
-                if "," in mutation['alt']:
-                    mutation['alt'] = mutation['alt'].split(",")
-                else:
-                    mutation['alt'] = [mutation['alt']]
-                for iterSampleTruthIndex in range(len(line[9:])):
-                    iterSampleTruth = int(line[9+iterSampleTruthIndex])
-                    if iterSampleTruth >= 1:
-                        iterSampleName = sampleNames[iterSampleTruthIndex]
-                        if samples[iterSampleName].get(mutation['chr']) == None:
-                            samples[iterSampleName][mutation['chr']] = {mutation['pos']:f"{mutation['ref']}>{mutation['alt'][iterSampleTruth-1]}"}
-                        else:
-                            samples[iterSampleName][mutation['chr']][mutation['pos']] = f"{mutation['ref']}>{mutation['alt'][iterSampleTruth-1]}"
+                if "#CHROM" in line[0]:
+                    foundHeaders = True
+                    headers = line[0:8]
+                    sampleNames = line[9:]
+                    for iterSample in sampleNames:
+                        samples[iterSample] = {
+                            '_id': iterSample,
+                            'data_src': '1000gpt',
+                            'tags': '',
+                            'chromosomes': dict()
+                        }
+                elif not foundHeaders:
+                    if "#reference" in line[0]:
+                        ref_info = line[0].replace("##reference=", "").split("|")
+                        for iterItemIndex in range(len(ref_info)):
+                            iterItem = ref_info[iterItemIndex]
+                            if "ref" == iterItem:
+                                _refID = ref_info[iterItemIndex + 1]
+                                break
+
+                elif foundHeaders:
+                    process_mutation(line, sampleNames, samples, _refID)
+                    pass
+
+    print()
+    return samples
+
+def process_mutation(line, sampleNames, samples, _refID):
+    mutation = {
+        'chr': line[0],
+        'pos': line[1],
+        'ref': line[3],
+        'alt': line[4]
+    }
+
+    if "," in mutation['alt']:
+        mutation['alt'] = mutation['alt'].split(",")
+    else:
+        mutation['alt'] = [mutation['alt']]
+    for iterSampleTruthIndex in range(len(line[9:])):
+        
+        iterSampleTruth = line[9+iterSampleTruthIndex]
+        iterSampleName = sampleNames[iterSampleTruthIndex]
+        _iterValue = None
+
+        if "|" in iterSampleTruth:
+            if "1" in iterSampleTruth:
+                _iterValue = iterSampleTruth
+            else:
+                continue
+        else:
+            iterSampleTruth = int(iterSampleTruth)
+            if iterSampleTruth >= 1:
+                _iterValue = f"{mutation['ref']}->{mutation['alt'][iterSampleTruth-1]}"
+
+        if _iterValue != None:
+            iterSampleName = sampleNames[iterSampleTruthIndex]
+            if not samples[iterSampleName]['chromosomes'].get(mutation['chr']):
+                samples[iterSampleName]['chromosomes'][mutation['chr']] = {mutation['pos']: _iterValue}
+            else:
+                samples[iterSampleName]['chromosomes'][mutation['chr']][mutation['pos']] = _iterValue
+
+            if not samples[iterSampleName]['chromosomes'][mutation['chr']].get(_refID):
+                samples[iterSampleName]['chromosomes'][mutation['chr']]['refID'] = _refID
 
     return samples
