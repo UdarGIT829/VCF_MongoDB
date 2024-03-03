@@ -1,5 +1,5 @@
-import import_database
-import import_vcf
+from utils import import_database
+from utils import import_vcf
 from pymongo import MongoClient
 
 
