@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 import json
 
 from utils import mutator
-from utilities import *
+from utils.utilities import *
 
 app = Flask(__name__)
 
