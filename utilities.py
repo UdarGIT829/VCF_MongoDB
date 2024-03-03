@@ -44,7 +44,7 @@ def get_refSEQ(accession:str) -> str:
     return result
 
 # Set your email here
-Entrez.email = "viraatudar9@gmail.com"
+Entrez.email = "example@example.com"
 
 def retrieve_ref_file(accession = "NC_012920.1"):
     # Define the accession number for the Homo sapiens mitochondrion, complete genome
