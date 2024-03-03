@@ -1,5 +1,5 @@
 import time
-import utilities
+import utils.utilities as utilities
 
 def mutate(_altData):
     seq = ""

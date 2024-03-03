@@ -1,6 +1,6 @@
 from pymongo import errors
 
-from utilities import *
+from utils.utilities import *
 
 def insertSamplesToCollection(collection, samples):
     # Insert the document
