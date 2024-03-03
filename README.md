@@ -17,3 +17,29 @@ From my experiences, that quality information per mutation lends itself well com
 ```ps
 pip install -r requirements.txt
 ```
+
+## Usage
+
+#### Importing VCF's into the database
+
+- Confirm that MongoDB is running
+- Place your VCF files into the `/vcf/` folder of this directory
+- Run the following command
+```ps
+python import_all_vcfs.py
+```
+#### Running the Server
+To run the server, simply use the following command:
+```ps
+python application_server.py
+```
+
+#### Querying the server
+To query the server use a similar structure for your command:
+
+```sh
+curl -G "http://127.0.0.1:5000/query" \
+     --data-urlencode "chr=MT" \
+     --data-urlencode "do mutation=true" \
+     --data-urlencode "query={\"_id\": \"HG00097\"}"
+```
