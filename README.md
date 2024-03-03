@@ -10,7 +10,11 @@ From my experiences, that quality information per mutation lends itself well com
 
 - Support for all chromosomes, including mitochondrial dna
 
-- Support for sharding across a network (PLANNED)
+#### Planned Features
+- Sharding Database across a network
+- On-Import or On-The-Fly BLAST lookup
+- Find mutated codons and identify affected coding regions via NCBI lookup
+- Tokenize Genetic Sequence for Natural Language Processing
 
 ## Installation
 
