@@ -7,8 +7,8 @@ From my experiences, that quality information per mutation lends itself well com
 
 ## Features
 - Index data by `Sample ID` (As per the format of 1000 Genome Project)
-
 - Support for all chromosomes, including mitochondrial dna
+- Support for Single and Dual strand
 
 #### Planned Features
 - Sharding Database across a network
