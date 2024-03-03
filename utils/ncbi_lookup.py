@@ -48,4 +48,3 @@ def fetch_mitochondrial_gene_info(position, accession="NC_012920", email="exampl
     except Exception as e:
         print(f"An error occurred: {e}")
         return {}
-
