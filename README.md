@@ -14,7 +14,7 @@ From my experiences, that quality information per mutation lends itself well com
 - Sharding Database across a network
 - On-Import or On-The-Fly BLAST lookup
 - Find mutated codons and identify affected coding regions via NCBI lookup
-- Tokenize Genetic Sequence for Natural Language Processing
+- Tokenize Genetic Sequence for Natural Language Processing, using a software simulation of RNA polymerase behavior
 
 ## Installation
 
