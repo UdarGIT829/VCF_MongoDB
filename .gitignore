@@ -156,3 +156,4 @@ cython_debug/
 *.gz
 *.txt
 *.fa
+app.py
