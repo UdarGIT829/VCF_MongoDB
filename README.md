@@ -11,6 +11,7 @@ From my experiences, that quality information per mutation lends itself well com
 - Support for Single and Dual strand
 
 #### Planned Features
+- FASTA file support for unaligned sequence data
 - Sharding Database across a network
 - On-Import or On-The-Fly BLAST lookup
 - Find mutated codons and identify affected coding regions via NCBI lookup
