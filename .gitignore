@@ -152,7 +152,7 @@ cython_debug/
 #.idea/
 
 # Sandbox testing
-*.vcf
+*.genotypes.vcf
 *.gz
 *.txt
 *.fa
