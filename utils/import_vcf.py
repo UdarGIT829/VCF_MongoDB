@@ -89,7 +89,7 @@ def process_mutation(line, sampleNames, samples, _refID):
             else:
                 samples[iterSampleName]['chromosomes'][mutation['chr']][mutation['pos']] = _iterValue
 
-            if not samples[iterSampleName]['chromosomes'][mutation['chr']].get(_refID):
-                samples[iterSampleName]['chromosomes'][mutation['chr']]['refID'] = _refID
+            # if not samples[iterSampleName]['chromosomes'][mutation['chr']].get(_refID):
+            samples[iterSampleName]['chromosomes'][mutation['chr']]['refID'] = _refID
 
     return samples
